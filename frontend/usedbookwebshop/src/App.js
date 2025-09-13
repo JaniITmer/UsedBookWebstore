@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link, Navigate } from "react-ro
 import AuthForm from "./AuthForm";
 import Books from "./Books";
 import Profile from "./Profile";
+import AddBook from "./AddBook";
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("jwt") || null);
@@ -34,12 +35,14 @@ function App() {
               <>
                 <Link to="/login"><button>Login</button></Link>
                 <Link to="/register"><button>Registration</button></Link>
+                
               </>
             )}
             {token && (
               <>
                 <Link to="/profile"><button>Profile</button></Link>
                 <button onClick={handleLogout}>Log out</button>
+                <Link to="/add-book"><button>New Book</button></Link>
               </>
             )}
           </div>
@@ -60,6 +63,7 @@ function App() {
             {token && (
               <>
                 <Route path="/profile" element={<Profile token={token} />} />
+                <Route path="/add-book" element={<AddBook token={token} />} />
                 <Route path="/" element={<Books token={token} />} />
                 <Route path="*" element={<Navigate to="/" />} />
               </>

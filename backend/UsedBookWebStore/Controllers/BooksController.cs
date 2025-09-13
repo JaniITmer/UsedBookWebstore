@@ -1,26 +1,48 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using UsedBookWebStore.Data;
 using UsedBookWebStore.Models;
 
 namespace UsedBookWebStore.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize] 
+    [Authorize]
     public class BooksController : ControllerBase
     {
-        
-        private static readonly List<Book> Books = new List<Book>
+        private readonly AppDbContext _context;
+
+        public BooksController(AppDbContext context)
         {
-            new Book { Id = 1, Title = "1984", Author = "George Orwell" },
-            new Book { Id = 2, Title = "Brave New World", Author = "Aldous Huxley" },
-            new Book { Id = 3, Title = "Fahrenheit 451", Author = "Ray Bradbury" }
-        };
+            _context = context;
+        }
 
         [HttpGet]
-        public IActionResult GetBooks()
+        public async Task<IActionResult> GetBooks()
         {
-            return Ok(Books);
+            var books = await _context.Books.ToListAsync();
+            return Ok(books);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddBook([FromBody] Book newBook)
+        {
+            if (newBook == null || string.IsNullOrWhiteSpace(newBook.Title))
+                return BadRequest("Invalid book data");
+
+          
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+                return Unauthorized();
+
+            newBook.UserId = userId;
+
+            _context.Books.Add(newBook);
+            await _context.SaveChangesAsync();
+
+            return Ok(newBook);
         }
     }
 }

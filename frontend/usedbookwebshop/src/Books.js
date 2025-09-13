@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "./styles/Books.css"
 
 export default function Books({ token }) {
   const [books, setBooks] = useState([]);
@@ -27,16 +28,14 @@ export default function Books({ token }) {
   if (error) return <p>{error}</p>;
   if (books.length === 0) return <p>No books.</p>;
 
-  return (
-    <div>
-      <h2>Books</h2>
-      <ul>
-        {books.map(book => (
-          <li key={book.id}>
-            {book.title} – {book.author}
-          </li>
-        ))}
-      </ul>
+   return (
+  <div className="books-grid">
+  {books.map((book) => (
+    <div key={book.id} className="book-card">
+      <h3>{book.title}</h3>
+      <p>{book.author}</p>
     </div>
+  ))}
+</div>
   );
 }
