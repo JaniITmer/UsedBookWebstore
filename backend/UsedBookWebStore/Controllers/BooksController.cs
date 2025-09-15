@@ -25,6 +25,19 @@ namespace UsedBookWebStore.Controllers
             var books = await _context.Books.ToListAsync();
             return Ok(books);
         }
+        [HttpGet("mybooks")]
+        public async Task<IActionResult> GetMyBooks()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null) 
+                return Unauthorized();
+
+            var myBooks=await _context.Books.Where(b=> b.UserId == userId).ToListAsync();
+
+            return Ok(myBooks);
+        }
+
+        
 
         [HttpPost]
         public async Task<IActionResult> AddBook([FromBody] Book newBook)

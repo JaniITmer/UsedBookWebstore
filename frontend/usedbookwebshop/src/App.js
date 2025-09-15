@@ -4,6 +4,7 @@ import AuthForm from "./AuthForm";
 import Books from "./Books";
 import Profile from "./Profile";
 import AddBook from "./AddBook";
+import Mybooks from "./Mybooks";
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("jwt") || null);
@@ -40,6 +41,7 @@ function App() {
             )}
             {token && (
               <>
+                <Link to="/mybooks"><button>My own books</button></Link>
                 <Link to="/profile"><button>Profile</button></Link>
                 <button onClick={handleLogout}>Log out</button>
                 <Link to="/add-book"><button>New Book</button></Link>
@@ -62,6 +64,7 @@ function App() {
             
             {token && (
               <>
+                <Route path="/mybooks" element={<Mybooks token={token} />} />
                 <Route path="/profile" element={<Profile token={token} />} />
                 <Route path="/add-book" element={<AddBook token={token} />} />
                 <Route path="/" element={<Books token={token} />} />
