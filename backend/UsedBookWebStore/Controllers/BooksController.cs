@@ -37,12 +37,29 @@ namespace UsedBookWebStore.Controllers
             return Ok(myBooks);
         }
 
-        
+        [HttpPut("{id}")]
 
+        public async Task<IActionResult> UpdateBook(int id, [FromBody]Book updateBook)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if(userId == null) return Unauthorized();
+            
+
+            var  book=await _context.Books.FirstOrDefaultAsync(b=>b.Id == id&& b.UserId==userId);
+            if (book == null) return NotFound("Book not found or you don't have permission to edit it.");
+
+            book.Title = updateBook.Title;
+            book.Author = updateBook.Author;
+            book.Price = updateBook.Price;
+            book.Currency = updateBook.Currency;
+            await _context.SaveChangesAsync();
+            return Ok(book);
+
+        }
         [HttpPost]
         public async Task<IActionResult> AddBook([FromBody] Book newBook)
         {
-            if (newBook == null || string.IsNullOrWhiteSpace(newBook.Title))
+            if (newBook == null || string.IsNullOrWhiteSpace(newBook.Title) || newBook.Price<0)
                 return BadRequest("Invalid book data");
 
           

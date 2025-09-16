@@ -25,7 +25,7 @@ export default function Profile({ token }) {
     fetchProfile();
   }, [token]);
 
-  if (!user) return <div className="profile-loading">Betöltés...</div>;
+  if (!user) return <div className="profile-loading">Loading...</div>;
 
   if (user.error) return <div className="profile-error">{user.error}</div>;
 

@@ -34,6 +34,8 @@ export default function Books({ token }) {
     <div key={book.id} className="book-card">
       <h3>{book.title}</h3>
       <p>{book.author}</p>
+      <p>{book.price} {book.currency}</p>
+      
     </div>
   ))}
 </div>
