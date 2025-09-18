@@ -71,7 +71,7 @@ namespace UsedBookWebStore.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound(new { message = "Felhasználó nem található." });
+                return NotFound(new { message = "Cant find the user." });
             }
 
             return Ok(new

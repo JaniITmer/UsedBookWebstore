@@ -1,10 +1,12 @@
-import { useState } from "react";
+
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from "react-router-dom";
 import AuthForm from "./AuthForm";
 import Books from "./Books";
 import Profile from "./Profile";
 import AddBook from "./AddBook";
 import Mybooks from "./Mybooks";
+import { jwtDecode } from "jwt-decode";
+import { useState, useEffect } from "react";
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("jwt") || null);
@@ -18,7 +20,23 @@ function App() {
     localStorage.removeItem("jwt");
     setToken(null);
   };
+    useEffect(() => {
+      if (!token) return;
 
+    const interval = setInterval(() => {
+      try {
+        const decoded = jwtDecode(token);
+        if (decoded.exp * 1000 < Date.now()) {
+          alert("Session expired, please log in again!");
+          handleLogout();
+        }
+      } catch {
+        handleLogout();
+      }
+  }, 10000); 
+
+  return () => clearInterval(interval);
+}, [token]);
   return (
     <Router>
       <div>
