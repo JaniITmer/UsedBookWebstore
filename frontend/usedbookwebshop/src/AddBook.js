@@ -33,7 +33,7 @@ function AddBook({ token }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2>Új könyv feltöltése</h2>
+      <h2>Add new book</h2>
       <input 
         type="text" 
         placeholder="Book title" 
