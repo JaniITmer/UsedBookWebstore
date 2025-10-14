@@ -5,6 +5,7 @@ import Books from "./Books";
 import Profile from "./Profile";
 import AddBook from "./AddBook";
 import Mybooks from "./Mybooks";
+import Chat from "./Chat";
 import { jwtDecode } from "jwt-decode";
 import { useState, useEffect } from "react";
 
@@ -62,6 +63,7 @@ function App() {
             )}
             {token && (
               <>
+                <Link to="/chat"><button>Chat</button></Link>
                 <Link to="/mybooks"><button>My own books</button></Link>
                 <Link to="/profile"><button>Profile</button></Link>
                 <Link to="/add-book"><button>New Book</button></Link>
@@ -84,6 +86,7 @@ function App() {
             {token && (
               <>
                 <Route path="/" element={<Books token={token} />} />
+                <Route path="/chat" element={<Chat token={token} />} />
                 <Route path="/mybooks" element={<Mybooks token={token} />} />
                 <Route path="/profile" element={<Profile token={token} />} />
                 <Route path="/add-book" element={<AddBook token={token} />} />

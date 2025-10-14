@@ -6,6 +6,7 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using UsedBookWebStore.Data;
 using UsedBookWebStore.Models;
+using UsedBookWebStore.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +39,24 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = jwtSettings["Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]))
     };
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            
+            var accessToken = context.Request.Query["access_token"];
+
+            
+            var path = context.HttpContext.Request.Path;
+            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/chatHub"))
+            {
+                context.Token = accessToken;
+            }
+
+            return Task.CompletedTask;
+        }
+    };
+
 });
 
 // Add services to the container.
@@ -78,9 +97,12 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowReact",
         policy => policy.WithOrigins("http://localhost:3000") // React frontend
                         .AllowAnyHeader()
-                        .AllowAnyMethod());
+                        .AllowAnyMethod()
+                        .AllowCredentials());
 });
+builder.Services.AddSignalR();
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -97,5 +119,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.MapHub<ChatHub>("/chatHub");
 app.Run();
