@@ -52,21 +52,21 @@ function App() {
           color: "white"
         }}>
           <h2 style={{ cursor: "pointer" }}>
-            <Link to="/" style={{ color: "white", textDecoration: "none" }}>UsedBookWebStore</Link>
+            <Link to="/usedbookwebstore" style={{ color: "white", textDecoration: "none" }}>UsedBookWebStore</Link>
           </h2>
           <div>
             {!token && (
               <>
-                <Link to="/login"><button>Login</button></Link>
-                <Link to="/register"><button>Registration</button></Link>
+                <Link to="/usedbookwebstore/login"><button>Login</button></Link>
+                <Link to="/usedbookwebstore/register"><button>Registration</button></Link>
               </>
             )}
             {token && (
               <>
-                <Link to="/chat"><button>Chat</button></Link>
-                <Link to="/mybooks"><button>My own books</button></Link>
-                <Link to="/profile"><button>Profile</button></Link>
-                <Link to="/add-book"><button>New Book</button></Link>
+                <Link to="/usedbookwebstore/chat"><button>Chat</button></Link>
+                <Link to="/usedbookwebstore/mybooks"><button>My own books</button></Link>
+                <Link to="/usedbookwebstore/profile"><button>Profile</button></Link>
+                <Link to="/usedbookwebstore/add-book"><button>New Book</button></Link>
                 <button onClick={handleLogout}>Log out</button>
               </>
             )}
@@ -77,20 +77,20 @@ function App() {
           <Routes>
             {!token && (
               <>
-                <Route path="/login" element={<LoginForm onLoginSuccess={handleLoginSuccess} />} />
-                <Route path="/register" element={<RegisterForm />} />
-                <Route path="*" element={<Navigate to="/login" />} />
+                <Route path="/usedbookwebstore/login" element={<LoginForm onLoginSuccess={handleLoginSuccess} />} />
+                <Route path="/usedbookwebstore/register" element={<RegisterForm />} />
+                <Route path="*" element={<Navigate to="/usedbookwebstore/login" />} />
               </>
             )}
 
             {token && (
               <>
-                <Route path="/" element={<Books token={token} />} />
-                <Route path="/chat" element={<Chat token={token} />} />
-                <Route path="/mybooks" element={<Mybooks token={token} />} />
-                <Route path="/profile" element={<Profile token={token} />} />
-                <Route path="/add-book" element={<AddBook token={token} />} />
-                <Route path="*" element={<Navigate to="/" />} />
+                <Route path="/usedbookwebstore" element={<Books token={token} />} />
+                <Route path="/usedbookwebstore/chat" element={<Chat token={token} />} />
+                <Route path="/usedbookwebstore/mybooks" element={<Mybooks token={token} />} />
+                <Route path="/usedbookwebstore/profile" element={<Profile token={token} />} />
+                <Route path="/usedbookwebstore/add-book" element={<AddBook token={token} />} />
+                <Route path="*" element={<Navigate to="/usedbookwebstore" />} />
               </>
             )}
           </Routes>

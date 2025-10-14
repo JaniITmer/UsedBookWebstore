@@ -19,7 +19,7 @@ export default function Chat({ token }) {
         .withAutomaticReconnect()
         .build();
 
-      newConnection.off("ReceiveMessage"); // remove old handlers just in case
+      newConnection.off("ReceiveMessage"); 
       newConnection.on("ReceiveMessage", (senderId, msg) => {
         setMessages((prev) => [...prev, { senderId, text: msg }]);
       });
@@ -70,7 +70,7 @@ export default function Chat({ token }) {
       <div style={styles.inputBox}>
         <input
           type="text"
-          placeholder="Receiver user ID"
+          placeholder="User name"
           value={receiver}
           onChange={(e) => setReceiver(e.target.value)}
           style={styles.input}
