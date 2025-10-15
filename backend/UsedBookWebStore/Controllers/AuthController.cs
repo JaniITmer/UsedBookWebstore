@@ -81,7 +81,25 @@ namespace UsedBookWebStore.Controllers
             {
                 user.UserName,
                 user.Email,
-                user.PhoneNumber
+                user.PhoneNumber,
+                user.ShowEmail,
+                user.ShowPhoneNumber,
+                user.ShowFullName
+            });
+        }
+
+        [HttpGet("{id}")]
+        [Authorize] 
+        public async Task<IActionResult> GetUserProfile(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound();
+
+            return Ok(new
+            {
+                fullName = user.ShowFullName ? user.Fullname : null,
+                email = user.ShowEmail ? user.Email : null,
+                phoneNumber = user.ShowPhoneNumber ? user.PhoneNumber : null
             });
         }
 
@@ -91,11 +109,11 @@ namespace UsedBookWebStore.Controllers
             var jwtSettings = _configuration.GetSection("Jwt");
 
             var claims = new[]
-{
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id), 
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),
-              new Claim("Fullname", user.Fullname)
-};
+            {
+        new Claim(ClaimTypes.NameIdentifier, user.Id), 
+        new Claim(JwtRegisteredClaimNames.Email, user.Email),
+        new Claim("Fullname", user.Fullname)
+    };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -110,9 +128,29 @@ namespace UsedBookWebStore.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+        [Authorize]
+     [HttpPut("privacy")]
+       public async Task<IActionResult> UpdatePrivacySettings([FromBody] PrivacySettingsDto dto)
+                {
+           var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+           var user = await _userManager.FindByIdAsync(userId);
+                if (user == null) return NotFound();
+
+                user.ShowEmail = dto.ShowEmail;
+                user.ShowPhoneNumber = dto.ShowPhoneNumber;
+                user.ShowFullName = dto.ShowFullName;
+
+                 await _userManager.UpdateAsync(user);
+               return Ok(new { message = "Privacy settings updated." });
+            }
+    }
+    public class PrivacySettingsDto
+    {
+        public bool ShowEmail { get; set; }
+        public bool ShowPhoneNumber { get; set; }
+        public bool ShowFullName { get; set; }
     }
 
-    
     public class RegisterDto
     {
         public string Fullname { get; set; } = "";

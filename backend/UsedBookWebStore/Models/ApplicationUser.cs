@@ -7,7 +7,9 @@ namespace UsedBookWebStore.Models
 
     {
         public string? Fullname { get; set; }
-       
+        public bool ShowEmail { get; set; } = true;
+        public bool ShowPhoneNumber { get; set; } = false;
+        public bool ShowFullName { get; set; } = true;
 
     }
 }

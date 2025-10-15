@@ -3,6 +3,7 @@ import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import Books from "./Books";
 import Profile from "./Profile";
+import ViewProfile from "./ViewProfile";
 import AddBook from "./AddBook";
 import Mybooks from "./Mybooks";
 import Chat from "./Chat";
@@ -86,6 +87,7 @@ function App() {
             {token && (
               <>
                 <Route path="/usedbookwebstore" element={<Books token={token} />} />
+                <Route path="/profile/:id" element={<ViewProfile token={token} />} />
                 <Route path="/usedbookwebstore/chat" element={<Chat token={token} />} />
                 <Route path="/usedbookwebstore/mybooks" element={<Mybooks token={token} />} />
                 <Route path="/usedbookwebstore/profile" element={<Profile token={token} />} />
