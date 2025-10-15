@@ -5,8 +5,9 @@ const API_URL = "https://localhost:7122/api/auth/register";
 export default function RegisterForm({ onClose }) {
   const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [password, setPassword] = useState("");
-  const [phonenumber,setPhoneNumber]=useState("");
+  const [phonenumber, setPhoneNumber] = useState("");
   const [message, setMessage] = useState("");
 
   const handleRegister = async () => {
@@ -14,20 +15,19 @@ export default function RegisterForm({ onClose }) {
       const res = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email,fullName, password,phonenumber})
+        body: JSON.stringify({ email, fullName, displayName, password, phonenumber })
       });
 
-       const data = await res.json(); 
-    if (!res.ok) {
-      
-      if (Array.isArray(data)) {
-        const messages = data.map(err => err.description).join("\n");
-        setMessage(messages);
-      } else {
-        setMessage(data || "Registration failed");
+      const data = await res.json(); 
+      if (!res.ok) {
+        if (Array.isArray(data)) {
+          const messages = data.map(err => err.description).join("\n");
+          setMessage(messages);
+        } else {
+          setMessage(data || "Registration failed");
+        }
+        return;
       }
-      return;
-    }
 
       setMessage("Registration successful! You can log in now.");
     } catch (err) {
@@ -51,6 +51,13 @@ export default function RegisterForm({ onClose }) {
         placeholder="Full name"
         value={fullName}
         onChange={(e) => setFullName(e.target.value)}
+        style={styles.input}
+      />
+      <input
+        type="text"
+        placeholder="Display name"
+        value={displayName}
+        onChange={(e) => setDisplayName(e.target.value)}
         style={styles.input}
       />
       <input

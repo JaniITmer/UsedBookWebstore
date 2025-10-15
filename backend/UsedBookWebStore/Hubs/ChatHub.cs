@@ -22,9 +22,9 @@ namespace UsedBookWebStore.Hubs
         {
             var senderId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var sender = await _context.Users.FindAsync(senderId);
-            var senderName = sender?.Fullname ?? "Unknown";
+            var senderName = sender?.DisplayName ?? sender?.Email ?? "Unknown";
 
-            var receiver = _context.Users.FirstOrDefault(u => u.Fullname == receiverName);
+            var receiver = _context.Users.FirstOrDefault(u => u.DisplayName == receiverName);
             if (receiver == null) return;
 
             var msg = new Message

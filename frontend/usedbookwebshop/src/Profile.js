@@ -75,6 +75,9 @@ export default function Profile({ token }) {
         <p className="profile-email">
           <strong>email:</strong> {user.email}
         </p>
+                <p className="profile-fullname">
+          <strong>full name:</strong> {user.fullname}
+        </p>
         <p className="profile-phone-number">
           <strong>phone number:</strong> {user.phoneNumber}
         </p>

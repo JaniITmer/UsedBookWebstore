@@ -36,9 +36,10 @@ namespace UsedBookWebStore.Controllers
                 UserName = model.Email,
                 Email = model.Email,
                 Fullname = model.Fullname,
-                PhoneNumber = model.PhoneNumber
-                
-                
+                PhoneNumber = model.PhoneNumber,
+                DisplayName = model.DisplayName
+
+
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -82,6 +83,7 @@ namespace UsedBookWebStore.Controllers
                 user.UserName,
                 user.Email,
                 user.PhoneNumber,
+                user.Fullname,
                 user.ShowEmail,
                 user.ShowPhoneNumber,
                 user.ShowFullName
@@ -156,6 +158,7 @@ namespace UsedBookWebStore.Controllers
         public string Fullname { get; set; } = "";
         public string Email { get; set; } = "";
         public string Password { get; set; } = "";
+        public string DisplayName { get; set; } = "";
 
         public string PhoneNumber { get; set; } = "";
     }
