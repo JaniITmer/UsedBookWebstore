@@ -18,13 +18,15 @@ function AddBook({ token }) {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
       },
-      body: JSON.stringify({ title, author ,price, currency})
+      body: JSON.stringify({ title, description, language, author ,price, currency})
     });
 
     if (res.ok) {
       const addedBook = await res.json();
       alert(`New book added successful: ${addedBook.title}`);
       setTitle("");
+      setDescription("");
+      setLanguage("");
       setAuthor("");
       setPrice("");
       setCurrency("");
@@ -64,7 +66,7 @@ function AddBook({ token }) {
       />
       </div>
        <div>
-     <textarea id="description" name="description" rows="4" cols="50">Description</textarea>
+     <textarea id="description" name="description" value={description}  rows="4" cols="50" onChange={(e) => setDescription(e.target.value)} >Description</textarea>
       </div>
       <div>
       <input 

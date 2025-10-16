@@ -36,6 +36,15 @@ namespace UsedBookWebStore.Controllers
 
             return Ok(myBooks);
         }
+        [HttpGet("{id}")]
+        public async Task<IActionResult>GetBookbyId(int id)
+        {
+            var book=await _context.Books.FirstOrDefaultAsync(b => b.Id == id);
+            if (book == null)
+                return NotFound("Book not  found");
+
+            return Ok(book);
+        }
 
         [HttpPut("{id}")]
 
@@ -49,6 +58,8 @@ namespace UsedBookWebStore.Controllers
             if (book == null) return NotFound("Book not found or you don't have permission to edit it.");
 
             book.Title = updateBook.Title;
+            book.Description = updateBook.Description;
+            book.Language = updateBook.Language;
             book.Author = updateBook.Author;
             book.Price = updateBook.Price;
             book.Currency = updateBook.Currency;
@@ -59,7 +70,7 @@ namespace UsedBookWebStore.Controllers
         [HttpPost]
         public async Task<IActionResult> AddBook([FromBody] Book newBook)
         {
-            if (newBook == null || string.IsNullOrWhiteSpace(newBook.Title) || newBook.Price<0)
+            if (newBook == null || string.IsNullOrWhiteSpace(newBook.Title) || newBook.Price<0 || string.IsNullOrWhiteSpace(newBook.Description) || string.IsNullOrWhiteSpace(newBook.Language))
                 return BadRequest("Invalid book data");
 
           

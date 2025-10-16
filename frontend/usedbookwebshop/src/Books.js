@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./styles/Books.css"
 
 export default function Books({ token }) {
   const [books, setBooks] = useState([]);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -31,7 +33,8 @@ export default function Books({ token }) {
    return (
   <div className="books-grid">
   {books.map((book) => (
-    <div key={book.id} className="book-card">
+    <div key={book.id} className="book-card"
+     onClick={() => navigate(`/usedbookwebstore/books/${book.id}`)}>
       <h3>{book.title}</h3>
       <p>{book.author}</p>
       <p>{book.price} {book.currency}</p>

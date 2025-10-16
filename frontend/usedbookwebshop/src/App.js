@@ -9,6 +9,7 @@ import Mybooks from "./Mybooks";
 import Chat from "./Chat";
 import { jwtDecode } from "jwt-decode";
 import { useState, useEffect } from "react";
+import BookDetails from "./BookDetails";
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("jwt") || null);
@@ -87,7 +88,8 @@ function App() {
             {token && (
               <>
                 <Route path="/usedbookwebstore" element={<Books token={token} />} />
-                <Route path="/profile/:id" element={<ViewProfile token={token} />} />
+                <Route path="/usedbookwebstore/books/:id" element={<BookDetails token={token} />} />
+                <Route path="/usedbookwebstore/profile/:id" element={<ViewProfile token={token} />} />
                 <Route path="/usedbookwebstore/chat" element={<Chat token={token} />} />
                 <Route path="/usedbookwebstore/mybooks" element={<Mybooks token={token} />} />
                 <Route path="/usedbookwebstore/profile" element={<Profile token={token} />} />
