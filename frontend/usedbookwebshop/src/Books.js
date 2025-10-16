@@ -35,9 +35,11 @@ export default function Books({ token }) {
   {books.map((book) => (
     <div key={book.id} className="book-card"
      onClick={() => navigate(`/usedbookwebstore/books/${book.id}`)}>
+      <p><strong>Uploaded by:</strong> {book.displayName || "Unknown"}</p>
       <h3>{book.title}</h3>
       <p>{book.author}</p>
       <p>{book.price} {book.currency}</p>
+      
       
     </div>
   ))}

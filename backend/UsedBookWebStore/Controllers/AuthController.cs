@@ -81,6 +81,7 @@ namespace UsedBookWebStore.Controllers
             return Ok(new
             {
                 user.UserName,
+                user.DisplayName,
                 user.Email,
                 user.PhoneNumber,
                 user.Fullname,

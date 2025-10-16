@@ -70,16 +70,19 @@ export default function Profile({ token }) {
           />
         </div>
 
-        <h2>{user.fullName}</h2>
+       
 
+        <p className="profile-username">
+              <strong>Username:</strong> {user.displayName}
+            </p>
         <p className="profile-email">
           <strong>email:</strong> {user.email}
         </p>
                 <p className="profile-fullname">
-          <strong>full name:</strong> {user.fullname}
+          <strong>Full name:</strong> {user.fullname}
         </p>
         <p className="profile-phone-number">
-          <strong>phone number:</strong> {user.phoneNumber}
+          <strong>Phone number:</strong> {user.phoneNumber}
         </p>
 
         <hr />

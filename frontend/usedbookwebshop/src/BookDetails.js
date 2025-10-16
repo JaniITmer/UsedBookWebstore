@@ -31,11 +31,13 @@ export default function BookDetails({ token }) {
 
   return (
     <div className="book-details">
+    <p><strong>Uploaded by:</strong> {book.displayName || "Unknown"}</p>
       <h2>{book.title}</h2>
       <p><strong>Author:</strong> {book.author}</p>
       <p><strong>Price:</strong> {book.price} {book.currency}</p>
       <p><strong>Description:</strong></p>
       <p>{book.description}</p>
+      
     </div>
   );
 }

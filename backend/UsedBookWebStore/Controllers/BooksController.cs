@@ -22,7 +22,19 @@ namespace UsedBookWebStore.Controllers
         [HttpGet]
         public async Task<IActionResult> GetBooks()
         {
-            var books = await _context.Books.ToListAsync();
+            var books = await _context.Books
+        .Include(b => b.User) 
+        .Select(b => new
+        {
+            b.Id,
+            b.Title,
+            b.Author,
+            b.Price,
+            b.Currency,
+            DisplayName = b.User != null ? b.User.DisplayName : "Unknown"
+        })
+        .ToListAsync();
+
             return Ok(books);
         }
         [HttpGet("mybooks")]
@@ -37,13 +49,26 @@ namespace UsedBookWebStore.Controllers
             return Ok(myBooks);
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult>GetBookbyId(int id)
+        public async Task<IActionResult> GetBookById(int id)
         {
-            var book=await _context.Books.FirstOrDefaultAsync(b => b.Id == id);
-            if (book == null)
-                return NotFound("Book not  found");
+            var book = await _context.Books
+                .Include(b => b.User) 
+                .FirstOrDefaultAsync(b => b.Id == id);
 
-            return Ok(book);
+            if (book == null)
+                return NotFound("Book not found");
+
+            return Ok(new
+            {
+                book.Id,
+                book.Title,
+                book.Author,
+                book.Price,
+                book.Currency,
+                book.Description,
+                book.Language,
+                DisplayName= book.User?.DisplayName
+            });
         }
 
         [HttpPut("{id}")]
