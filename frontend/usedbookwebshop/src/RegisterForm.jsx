@@ -11,69 +11,100 @@ export default function RegisterForm({ onClose }) {
   const [message, setMessage] = useState("");
 
   const handleRegister = async () => {
-    try {
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, fullName, displayName, password, phonenumber })
-      });
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ 
+        email, 
+        fullName, 
+        displayName, 
+        password, 
+        phonenumber 
+      })
+    });
 
-      const data = await res.json(); 
-      if (!res.ok) {
-        if (Array.isArray(data)) {
-          const messages = data.map(err => err.description).join("\n");
-          setMessage(messages);
-        } else {
-          setMessage(data || "Registration failed");
-        }
-        return;
+    const data = await res.json();
+
+    if (!res.ok) {
+      
+      if (data?.message) {
+        setMessage(data.message);
+      } 
+      
+      else if (Array.isArray(data)) {
+        const messages = data.map(err => err.description).join("\n");
+        setMessage(messages);
+      } else {
+        setMessage("Registration failed");
       }
-
-      setMessage("Registration successful! You can log in now.");
-    } catch (err) {
-      console.error(err);
-      setMessage("Network error.");
+      return;
     }
-  };
+
+    
+    setMessage("Registration successful! You can log in now.");
+    
+    setEmail(""); setFullName(""); setDisplayName(""); setPassword(""); setPhoneNumber("");
+  } catch (err) {
+    console.error(err);
+    setMessage("Network error.");
+  }
+};
 
   return (
     <div style={styles.container}>
       <h2>Registration</h2>
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        style={styles.input}
-      />
-      <input
-        type="text"
-        placeholder="Full name"
-        value={fullName}
-        onChange={(e) => setFullName(e.target.value)}
-        style={styles.input}
-      />
-      <input
-        type="text"
-        placeholder="Display name"
-        value={displayName}
-        onChange={(e) => setDisplayName(e.target.value)}
-        style={styles.input}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        style={styles.input}
-      />
-      <input
-        type="text"
-        placeholder="Phone number"
-        value={phonenumber}
-        onChange={(e) => setPhoneNumber(e.target.value)}
-        style={styles.input}
-      />
+    <div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
+  <label htmlFor="email" style={{ width: "120px" }}>Email:</label>
+  <input
+    id="email"
+    type="email"
+    value={email}
+    onChange={(e) => setEmail(e.target.value)}
+    style={{ flex: 1 }}
+  />
+</div>
+<div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
+  <label htmlFor="fullname" style={{ width: "120px" }}>Full name:</label>
+  <input
+    id="fullname"
+    type="text"
+    value={fullName}
+    onChange={(e) => setFullName(e.target.value)}
+    style={{ flex: 1 }}
+  />
+</div>
+      <div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
+  <label htmlFor="displayname" style={{ width: "120px" }}>Display name:</label>
+  <input
+    id="displayname"
+    type="text"
+    value={displayName}
+    onChange={(e) => setDisplayName(e.target.value)}
+    style={{ flex: 1 }}
+  />
+</div>
+      <div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
+  <label htmlFor="password" style={{ width: "120px" }}>Password:</label>
+  <input
+    id="password"
+    type="password"
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    style={{ flex: 1 }}
+  />
+</div>
+<div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
+  <label htmlFor="phonenumber" style={{ width: "120px" }}>Phone number:</label>
+  <input
+    id="phonenumber"
+    type="text"
+    value={displayName}
+    onChange={(e) => setPhoneNumber(e.target.value)}
+    style={{ flex: 1 }}
+  />
+</div>
+     
       <button onClick={handleRegister} style={styles.button}>Register</button>
       <button onClick={onClose}>Cancel</button>
       {message && <p style={{ whiteSpace: "pre-line" }}>{message}</p>}

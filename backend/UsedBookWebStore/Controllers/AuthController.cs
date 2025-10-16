@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -31,6 +32,18 @@ namespace UsedBookWebStore.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto model)
         {
+            
+            if (await _userManager.Users.AnyAsync(u => u.Email == model.Email))
+            {
+                return BadRequest(new { message = "This email is already registered." });
+            }
+
+            
+            if (await _userManager.Users.AnyAsync(u => u.DisplayName == model.DisplayName))
+            {
+                return BadRequest(new { message = "This display name is already taken." });
+            }
+
             var user = new ApplicationUser
             {
                 UserName = model.Email,
@@ -38,8 +51,6 @@ namespace UsedBookWebStore.Controllers
                 Fullname = model.Fullname,
                 PhoneNumber = model.PhoneNumber,
                 DisplayName = model.DisplayName
-
-
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -49,6 +60,7 @@ namespace UsedBookWebStore.Controllers
                 return Ok(new { message = "User registered successfully!" });
             }
 
+            
             return BadRequest(result.Errors);
         }
 
