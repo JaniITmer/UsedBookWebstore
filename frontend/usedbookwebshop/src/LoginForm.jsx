@@ -12,7 +12,7 @@ export default function LoginForm({ onLoginSuccess, onClose }) {
       const res = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password }),
       });
 
       if (!res.ok) {
@@ -34,31 +34,110 @@ export default function LoginForm({ onLoginSuccess, onClose }) {
   };
 
   return (
-    <div style={styles.container}>
-      <h2>Login</h2>
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        style={styles.input}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        style={styles.input}
-      />
-      <button onClick={handleLogin} style={styles.button}>Login</button>
-      <button onClick={onClose}>Cancel</button>
-      {message && <p>{message}</p>}
+    <div style={styles.wrapper}>
+     
+      <div style={{ ...styles.sideImage, backgroundImage: "url('/images/pexels-pixabay-207662.jpg')",opacity:0.85 }} />
+
+      
+      <div style={styles.container}>
+        <h2 style={styles.title}>Login</h2>
+
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          style={styles.input}
+        />
+
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          style={styles.input}
+        />
+
+        <div style={styles.buttonRow}>
+          <button onClick={handleLogin} style={styles.buttonPrimary}>
+            Login
+          </button>
+          <button onClick={onClose} style={styles.buttonSecondary}>
+            Cancel
+          </button>
+        </div>
+
+        {message && <p style={styles.message}>{message}</p>}
+      </div>
+
+      
+      <div style={{ ...styles.sideImage, backgroundImage: "url('/images/pexels-pixabay-207662.jpg')",opacity:0.85 }} />
     </div>
   );
 }
 
 const styles = {
-  container: { maxWidth: "400px", margin: "20px auto", padding: "20px", border: "1px solid #ccc" },
-  input: { display: "block", marginBottom: "10px", width: "100%" },
-  button: { marginRight: "10px" }
+  wrapper: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "100vh",
+    backgroundColor: "#f7f7f7",
+  },
+  sideImage: {
+    flex: 1,
+    height: "100%",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  },
+  container: {
+    width: "400px",
+    backgroundColor: "#fff",
+    borderRadius: "12px",
+    padding: "40px 30px",
+    boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+    textAlign: "center",
+    margin: "0 40px",
+  },
+  title: {
+    marginBottom: "25px",
+    color: "#333",
+  },
+  input: {
+    width: "100%",
+    padding: "10px 12px",
+    marginBottom: "15px",
+    borderRadius: "8px",
+    border: "1px solid #ccc",
+    fontSize: "16px",
+  },
+  buttonRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    marginTop: "10px",
+  },
+  buttonPrimary: {
+    flex: 1,
+    backgroundColor: "#DEB887",
+    color: "#fff",
+    border: "none",
+    padding: "10px 15px",
+    borderRadius: "8px",
+    cursor: "pointer",
+    fontSize: "16px",
+    marginRight: "10px",
+  },
+  buttonSecondary: {
+    flex: 1,
+    backgroundColor: "#ccc",
+    border: "none",
+    padding: "10px 15px",
+    borderRadius: "8px",
+    cursor: "pointer",
+    fontSize: "16px",
+  },
+  message: {
+    marginTop: "15px",
+    color: "#444",
+  },
 };

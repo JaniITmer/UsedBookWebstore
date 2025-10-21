@@ -53,6 +53,26 @@ function MyBooks({ token }) {
       console.error(err);
     }
   };
+  const deleteBook = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this book?")) return;
+
+    try {
+      const res = await fetch(`https://localhost:7122/api/books/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      if (!res.ok) throw new Error("Delete failed");
+
+      
+      setBooks(books.filter(b => b.id !== id));
+    } catch (err) {
+      console.error(err);
+      alert("An error occurred while deleting the book.");
+    }
+  };
+
+
 
   return (
     <div className="books-grid">
@@ -126,6 +146,7 @@ function MyBooks({ token }) {
                   {book.currency === "GBP" && "GBP (£)"}
                 </p>
                 <button onClick={() => startEditing(book)}>✏️ Edit</button>
+                <button onClick={() => deleteBook(book.id)}>🗑️ Delete</button>
               </>
             )}
           </div>

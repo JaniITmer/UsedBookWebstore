@@ -11,109 +11,153 @@ export default function RegisterForm({ onClose }) {
   const [message, setMessage] = useState("");
 
   const handleRegister = async () => {
-  try {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ 
-        email, 
-        fullName, 
-        displayName, 
-        password, 
-        phonenumber 
-      })
-    });
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          fullName,
+          displayName,
+          password,
+          phonenumber,
+        }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (!res.ok) {
-      
-      if (data?.message) {
-        setMessage(data.message);
-      } 
-      
-      else if (Array.isArray(data)) {
-        const messages = data.map(err => err.description).join("\n");
-        setMessage(messages);
-      } else {
-        setMessage("Registration failed");
+      if (!res.ok) {
+        if (data?.message) {
+          setMessage(data.message);
+        } else if (Array.isArray(data)) {
+          const messages = data.map((err) => err.description).join("\n");
+          setMessage(messages);
+        } else {
+          setMessage("Registration failed");
+        }
+        return;
       }
-      return;
+
+      setMessage("Registration successful! You can log in now.");
+      setEmail("");
+      setFullName("");
+      setDisplayName("");
+      setPassword("");
+      setPhoneNumber("");
+    } catch (err) {
+      console.error(err);
+      setMessage("Network error.");
     }
+  };
 
-    
-    setMessage("Registration successful! You can log in now.");
-    
-    setEmail(""); setFullName(""); setDisplayName(""); setPassword(""); setPhoneNumber("");
-  } catch (err) {
-    console.error(err);
-    setMessage("Network error.");
-  }
-};
+   return (
+    <div style={styles.wrapper}>
+      
+      <div
+        style={{
+          ...styles.sideImage,
+          backgroundImage: "url('/images/pexels-element5-1370295.jpg')",
+          opacity: 0.85
+        }}
+        aria-hidden="true"
+      />
 
-  return (
-    <div style={styles.container}>
-      <h2>Registration</h2>
-    <div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
-  <label htmlFor="email" style={{ width: "120px" }}>Email:</label>
-  <input
-    id="email"
-    type="email"
-    value={email}
-    onChange={(e) => setEmail(e.target.value)}
-    style={{ flex: 1 }}
-  />
-</div>
-<div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
-  <label htmlFor="fullname" style={{ width: "120px" }}>Full name:</label>
-  <input
-    id="fullname"
-    type="text"
-    value={fullName}
-    onChange={(e) => setFullName(e.target.value)}
-    style={{ flex: 1 }}
-  />
-</div>
-      <div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
-  <label htmlFor="displayname" style={{ width: "120px" }}>Display name:</label>
-  <input
-    id="displayname"
-    type="text"
-    value={displayName}
-    onChange={(e) => setDisplayName(e.target.value)}
-    style={{ flex: 1 }}
-  />
-</div>
-      <div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
-  <label htmlFor="password" style={{ width: "120px" }}>Password:</label>
-  <input
-    id="password"
-    type="password"
-    value={password}
-    onChange={(e) => setPassword(e.target.value)}
-    style={{ flex: 1 }}
-  />
-</div>
-<div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
-  <label htmlFor="phonenumber" style={{ width: "120px" }}>Phone number:</label>
-  <input
-    id="phonenumber"
-    type="text"
-    value={displayName}
-    onChange={(e) => setPhoneNumber(e.target.value)}
-    style={{ flex: 1 }}
-  />
-</div>
-     
-      <button onClick={handleRegister} style={styles.button}>Register</button>
-      <button onClick={onClose}>Cancel</button>
-      {message && <p style={{ whiteSpace: "pre-line" }}>{message}</p>}
+      
+      <div style={styles.container}>
+        <h2>Register</h2>
+        
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          style={styles.input}
+        />
+        <input
+          type="text"
+          placeholder="Full name"
+          value={fullName}
+          onChange={(e) => setFullName(e.target.value)}
+          style={styles.input}
+        />
+        <input
+          type="text"
+          placeholder="Display name"
+          value={displayName}
+          onChange={(e) => setDisplayName(e.target.value)}
+          style={styles.input}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          style={styles.input}
+        />
+        <input
+          type="text"
+          placeholder="Phone number"
+          value={phonenumber}
+          onChange={(e) => setPhoneNumber(e.target.value)}
+          style={styles.input}
+        />
+
+        <div>
+          <button onClick={handleRegister} style={styles.button}>
+            Register
+          </button>
+          <button onClick={onClose}>Cancel</button>
+        </div>
+
+        {message && <p style={{ whiteSpace: "pre-line" }}>{message}</p>}
+      </div>
+
+      
+      <div
+        style={{
+          ...styles.sideImage,
+          backgroundImage: "url('/images/pexels-element5-1370295.jpg')",
+           opacity:0.85
+        }}
+        aria-hidden="true"
+      />
     </div>
   );
 }
 
 const styles = {
-  container: { maxWidth: "400px", margin: "20px auto", padding: "20px", border: "1px solid #ccc" },
-  input: { display: "block", marginBottom: "10px", width: "100%" },
-  button: { marginRight: "10px" }
+  wrapper: {
+    display: "flex",
+    height: "100vh",
+    width: "100vw",
+  },
+  sideImage: {
+    flex: 1,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+  },
+  container: {
+    flex: "0 0 400px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: "20px",
+    borderLeft: "1px solid #ccc",
+    borderRight: "1px solid #ccc",
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    textAlign: "center",
+  },
+  input: {
+    display: "block",
+    marginBottom: "10px",
+    width: "100%",
+    padding: "8px",
+  },
+  button: {
+    marginRight: "10px",
+    padding: "8px 16px",
+    cursor: "pointer",
+  },
 };

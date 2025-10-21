@@ -23,7 +23,7 @@ namespace UsedBookWebStore.Controllers
         public async Task<IActionResult> GetBooks()
         {
             var books = await _context.Books
-        .Include(b => b.User) 
+        .Include(b => b.User)
         .Select(b => new
         {
             b.Id,
@@ -41,10 +41,10 @@ namespace UsedBookWebStore.Controllers
         public async Task<IActionResult> GetMyBooks()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null) 
+            if (userId == null)
                 return Unauthorized();
 
-            var myBooks=await _context.Books.Where(b=> b.UserId == userId).ToListAsync();
+            var myBooks = await _context.Books.Where(b => b.UserId == userId).ToListAsync();
 
             return Ok(myBooks);
         }
@@ -52,7 +52,7 @@ namespace UsedBookWebStore.Controllers
         public async Task<IActionResult> GetBookById(int id)
         {
             var book = await _context.Books
-                .Include(b => b.User) 
+                .Include(b => b.User)
                 .FirstOrDefaultAsync(b => b.Id == id);
 
             if (book == null)
@@ -67,19 +67,19 @@ namespace UsedBookWebStore.Controllers
                 book.Currency,
                 book.Description,
                 book.Language,
-                DisplayName= book.User?.DisplayName
+                DisplayName = book.User?.DisplayName
             });
         }
 
         [HttpPut("{id}")]
 
-        public async Task<IActionResult> UpdateBook(int id, [FromBody]Book updateBook)
+        public async Task<IActionResult> UpdateBook(int id, [FromBody] Book updateBook)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if(userId == null) return Unauthorized();
-            
+            if (userId == null) return Unauthorized();
 
-            var  book=await _context.Books.FirstOrDefaultAsync(b=>b.Id == id&& b.UserId==userId);
+
+            var book = await _context.Books.FirstOrDefaultAsync(b => b.Id == id && b.UserId == userId);
             if (book == null) return NotFound("Book not found or you don't have permission to edit it.");
 
             book.Title = updateBook.Title;
@@ -95,10 +95,10 @@ namespace UsedBookWebStore.Controllers
         [HttpPost]
         public async Task<IActionResult> AddBook([FromBody] Book newBook)
         {
-            if (newBook == null || string.IsNullOrWhiteSpace(newBook.Title) || newBook.Price<0 || string.IsNullOrWhiteSpace(newBook.Description) || string.IsNullOrWhiteSpace(newBook.Language))
+            if (newBook == null || string.IsNullOrWhiteSpace(newBook.Title) || newBook.Price < 0 || string.IsNullOrWhiteSpace(newBook.Description) || string.IsNullOrWhiteSpace(newBook.Language))
                 return BadRequest("Invalid book data");
 
-          
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
                 return Unauthorized();
@@ -109,6 +109,23 @@ namespace UsedBookWebStore.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(newBook);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteBook(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+                return Unauthorized();
+
+            var book=await _context.Books.FirstOrDefaultAsync(b=>b.Id == id && b.UserId == userId);
+            if (book == null)
+                return NotFound("Book not found or you don't have permission to delete it.");
+
+            _context.Books.Remove(book);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Book deleted successfully" });
         }
     }
 }
